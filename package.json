@@ -1,0 +1,33 @@
+{
+  "name": "advent-of-code-2023",
+  "version": "1.0.0",
+  "description": "advent of code solutions of 2023",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "mocha '**/solutions/**/**.test.js' --recursive -t 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ilkerkaran/advent-of-code-2023.git"
+  },
+  "author": "ilker karan",
+  "license": "ISC",
+  "standard": {
+    "env": [
+      "mocha"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/ilkerkaran/advent-of-code-2023/issues"
+  },
+  "homepage": "https://github.com/ilkerkaran/advent-of-code-2023#readme",
+  "dependencies": {
+    "callsite": "^1.0.0",
+    "chai": "^4.3.10",
+    "mocha": "^10.2.0"
+  },
+  "devDependencies": {
+    "standard": "^17.1.0"
+  }
+}
