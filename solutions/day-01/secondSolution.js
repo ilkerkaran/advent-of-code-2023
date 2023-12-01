@@ -1,53 +1,51 @@
-import { getK, structForest } from './structTree.js'
-
 export default (arr) => {
-  const x = arr[0].length
-  const y = arr.length
-  // struct map
-  const treeMap = structForest(arr)
+  const writings = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+  const equals = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
 
-  const getTree = (i, j) => treeMap[getK(i, j)]
-  let curBestView = 0
+  return arr.reduce((sum, str) => {
+    const locations = []
 
-  const calculateView = (coorX, coorY) => {
-    const ownLength = getTree(coorX, coorY)
-    let r = 0
-    let l = 0
-    let u = 0
-    let d = 0
-    // look right
-    for (let j = coorY + 1; j < y; j++) {
-      const targetTree = getTree(coorX, j)
-      r++
-      if (ownLength <= targetTree) { break }
-    }
-    // look down
-    for (let i = coorX + 1; i < x; i++) {
-      const targetTree = getTree(i, coorY)
-      d++
-      if (ownLength <= targetTree) { break }
-    }
-    // look left
-    for (let j = coorY - 1; j >= 0; j--) {
-      const targetTree = getTree(coorX, j)
-      l++
-      if (ownLength <= targetTree) { break }
-    }
-    // look up
-    for (let i = coorX - 1; i >= 0; i--) {
-      const targetTree = getTree(i, coorY)
-      u++
-      if (ownLength <= targetTree) { break }
+    writings.map((writing, i) => {
+      return [...str.matchAll(writing)].map(a => {
+        locations[a.index] = equals[i]
+        return 0
+      })
+    })
+
+    // find first digit of the str
+    for (let i = 0; i < str.length; i++) {
+      if (!isNaN(+str[i])) {
+        locations[i] = str[i]
+        break
+      }
     }
 
-    return r * l * u * d
-  }
-
-  for (let i = 1; i < x - 1; i++) {
-    for (let j = 1; j < y - 1; j++) {
-      curBestView = Math.max(curBestView, calculateView(i, j))
+    // find last digit of the str
+    for (let i = str.length - 1; i >= 0; i--) {
+      if (!isNaN(+str[i])) {
+        locations[i] = str[i]
+        break
+      }
     }
-  }
 
-  return curBestView
+    // find first filled location
+    let firstFilled = 0
+    for (let i = 0; i < locations.length; i++) {
+      if (locations[i]) {
+        firstFilled = locations[i]
+        break
+      }
+    }
+    // find last filled location
+    let lastFilled = 0
+    for (let i = locations.length - 1; i >= 0; i--) {
+      if (locations[i]) {
+        lastFilled = locations[i]
+        break
+      }
+    }
+
+    console.log('locations', firstFilled, lastFilled)
+    return sum + +(firstFilled + lastFilled)
+  }, 0)
 }
