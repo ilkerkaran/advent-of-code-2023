@@ -45,7 +45,6 @@ export default (arr) => {
       }
     }
 
-    console.log('locations', firstFilled, lastFilled)
     return sum + +(firstFilled + lastFilled)
   }, 0)
 }
