@@ -4,12 +4,11 @@ export default (arr) => {
 
   const checkAdj = (i, j) => {
     const char = engine?.[i]?.[j]
-    return char !== +char && char !== "." && !!char
+    return char !== +char && char !== '.' && !!char
   }
   const checkNumberAdjacent = (startI, startJ, numberLength) => {
     let hasSymbol = false
     for (let j = startJ; j < startJ + numberLength; j++) {
-
       // check first digit
       if (j === startJ) {
         const [ni, nj] = n(startI, j)
@@ -21,14 +20,13 @@ export default (arr) => {
         const [nei, nej] = ne(startI, j)
         hasSymbol = checkAdj(ni, nj) || checkAdj(wi, wj) || checkAdj(nwi, nwj) || checkAdj(swi, swj) || checkAdj(si, sj) || checkAdj(sei, sej) || checkAdj(nei, nej)
       }
-      //check last digit
+      // check last digit
       else if (j === startJ + numberLength - 1) {
         const [ei, ej] = e(startI, j)
         const [nei, nej] = ne(startI, j)
         const [sei, sej] = se(startI, j)
         hasSymbol = checkAdj(ei, ej) || checkAdj(nei, nej) || checkAdj(sei, sej)
-      }
-      else {
+      } else {
         const [nei, nej] = ne(startI, j)
         const [sei, sej] = se(startI, j)
         hasSymbol = checkAdj(nei, nej) || checkAdj(sei, sej)
@@ -40,23 +38,18 @@ export default (arr) => {
     return hasSymbol
   }
 
-
-
-
   for (let i = 0; i < arr.length; i++) {
-    const row = arr[i];
+    const row = arr[i]
     const numberMatches = [...row.matchAll(/\d+/g)]
 
     for (let j = 0; j < numberMatches.length; j++) {
       const match = numberMatches[j]
       if (checkNumberAdjacent(i, match.index, match[0].length)) {
-        console.log("match", match[0], i)
+        console.log('match', match[0], i)
         sum += parseInt(match[0])
       }
     }
   }
-
-
 
   return sum
 }
