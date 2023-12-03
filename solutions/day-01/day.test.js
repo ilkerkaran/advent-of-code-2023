@@ -2,7 +2,9 @@ import { assertSolution, assertTest, getFileP } from '../utils.js'
 import first from './firstSolution.js'
 import second from './secondSolution.js'
 
-const dayName = 'day8'
+// this name is used to target the correct file when testing
+// eg `mocha test -- -f day01-first`
+const dayName = 'day01'
 
 describe(`${dayName}-first`, function () {
   const func = first
