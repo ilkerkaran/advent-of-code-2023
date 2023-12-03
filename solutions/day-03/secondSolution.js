@@ -25,9 +25,7 @@ export default (arr) => {
           (checkAdj(si, sj) && [si, sj]) ||
           (checkAdj(sei, sej) && [sei, sej]) ||
           (checkAdj(nei, nej) && [nei, nej])
-      }
-      // check last digit
-      else if (j === startJ + numberLength - 1) {
+      } else if (j === startJ + numberLength - 1) {
         const [ei, ej] = e(startI, j)
         const [nei, nej] = ne(startI, j)
         const [sei, sej] = se(startI, j)

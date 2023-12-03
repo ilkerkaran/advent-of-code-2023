@@ -19,9 +19,7 @@ export default (arr) => {
         const [sei, sej] = se(startI, j)
         const [nei, nej] = ne(startI, j)
         hasSymbol = checkAdj(ni, nj) || checkAdj(wi, wj) || checkAdj(nwi, nwj) || checkAdj(swi, swj) || checkAdj(si, sj) || checkAdj(sei, sej) || checkAdj(nei, nej)
-      }
-      // check last digit
-      else if (j === startJ + numberLength - 1) {
+      } else if (j === startJ + numberLength - 1) {
         const [ei, ej] = e(startI, j)
         const [nei, nej] = ne(startI, j)
         const [sei, sej] = se(startI, j)
