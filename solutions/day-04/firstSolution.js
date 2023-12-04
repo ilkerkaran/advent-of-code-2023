@@ -14,7 +14,6 @@ export default (arr) => {
       }
     }
     if (match > 0) { sum += Math.pow(2, match - 1) }
-    console.log('curSum', i, sum)
   }
   return sum
 }
