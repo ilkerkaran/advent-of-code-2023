@@ -1,10 +1,10 @@
 export default (arr) => {
   const engine = arr.map((row) => row.split(''))
   let sum = 0
-
+  const myMap = {}
   const checkAdj = (i, j) => {
     const char = engine?.[i]?.[j]
-    return char !== +char && char !== '.' && !!char
+    return char === '*'
   }
   const checkNumberAdjacent = (startI, startJ, numberLength) => {
     let hasSymbol = false
@@ -18,16 +18,25 @@ export default (arr) => {
         const [si, sj] = s(startI, j)
         const [sei, sej] = se(startI, j)
         const [nei, nej] = ne(startI, j)
-        hasSymbol = checkAdj(ni, nj) || checkAdj(wi, wj) || checkAdj(nwi, nwj) || checkAdj(swi, swj) || checkAdj(si, sj) || checkAdj(sei, sej) || checkAdj(nei, nej)
+        hasSymbol = (checkAdj(ni, nj) && [ni, nj]) ||
+          (checkAdj(wi, wj) && [wi, wj]) ||
+          (checkAdj(nwi, nwj) && [nwi, nwj]) ||
+          (checkAdj(swi, swj) && [swi, swj]) ||
+          (checkAdj(si, sj) && [si, sj]) ||
+          (checkAdj(sei, sej) && [sei, sej]) ||
+          (checkAdj(nei, nej) && [nei, nej])
       } else if (j === startJ + numberLength - 1) {
         const [ei, ej] = e(startI, j)
         const [nei, nej] = ne(startI, j)
         const [sei, sej] = se(startI, j)
-        hasSymbol = checkAdj(ei, ej) || checkAdj(nei, nej) || checkAdj(sei, sej)
+        hasSymbol = (checkAdj(ei, ej) && [ei, ej]) ||
+          (checkAdj(nei, nej) && [nei, nej]) ||
+          (checkAdj(sei, sej) && [sei, sej])
       } else {
         const [nei, nej] = ne(startI, j)
         const [sei, sej] = se(startI, j)
-        hasSymbol = checkAdj(nei, nej) || checkAdj(sei, sej)
+        hasSymbol = (checkAdj(nei, nej) && [nei, nej]) ||
+          (checkAdj(sei, sej) && [sei, sej])
       }
       if (hasSymbol) {
         break
@@ -42,12 +51,21 @@ export default (arr) => {
 
     for (let j = 0; j < numberMatches.length; j++) {
       const match = numberMatches[j]
-      if (checkNumberAdjacent(i, match.index, match[0].length)) {
-        sum += parseInt(match[0])
+
+      const starAddress = checkNumberAdjacent(i, match.index, match[0].length)
+      if (starAddress) {
+        if (myMap[`${starAddress[0]}_${starAddress[1]}`]) {
+          myMap[`${starAddress[0]}_${starAddress[1]}`].push(+match[0])
+        } else { myMap[`${starAddress[0]}_${starAddress[1]}`] = [+match[0]] }
       }
     }
   }
 
+  Object.values(myMap).forEach((arr) => {
+    if (arr.length === 2) {
+      sum += (arr[0] * arr[1])
+    }
+  })
   return sum
 }
 

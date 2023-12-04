@@ -3,13 +3,13 @@ import first from './firstSolution.js'
 import second from './secondSolution.js'
 
 // this name is used to target the correct file when testing
-// eg `mocha test -- -f day03-first`
-const dayName = 'day03'
+// eg `mocha test -- -f day04-first`
+const dayName = 'day04'
 
 describe(`${dayName}-first`, function () {
   const func = first
-  assertTest(getFileP('testinput'), func, 13)
-  assertSolution(getFileP('input'), func)
+  assertTest(getFileP('testinput'), func, 4361)
+  // assertSolution(getFileP('input'), func)
 })
 
 describe(`${dayName}-second`, function () {
