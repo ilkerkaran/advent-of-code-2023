@@ -56,10 +56,10 @@ export default (arr) => {
   let minRes = Number.MAX_SAFE_INTEGER
 
   for (let i = 0; i < seeds.length; i += 2) {
-    const range = seeds[i + 1]
+    const locRange = seeds[i + 1]
     const maps = Object.values(almanac)
-    for (let j = 0; j < range; j++) {
-      let loc = seeds[i] + j
+    for (let r = 0; r < locRange; r++) {
+      let loc = seeds[i] + r
 
       for (let j = 0; j < maps.length; j++) {
         const m = maps[j]
@@ -70,6 +70,10 @@ export default (arr) => {
           const range = m.range[k]
           if (loc >= from && loc <= from + range) {
             loc = to + (loc - from)
+
+            const remLocR = locRange - r
+            const remMapR = from - loc - range
+            r = +Math.min(remLocR, remMapR)
             break
           }
         }
