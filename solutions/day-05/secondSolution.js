@@ -70,10 +70,6 @@ export default (arr) => {
           const range = m.range[k]
           if (loc >= from && loc <= from + range) {
             loc = to + (loc - from)
-
-            const remLocR = locRange - r
-            const remMapR = from - loc - range
-            r = +Math.min(remLocR, remMapR)
             break
           }
         }
