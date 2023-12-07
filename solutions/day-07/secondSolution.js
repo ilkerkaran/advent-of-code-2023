@@ -28,8 +28,6 @@ export default (arr) => {
           while (curJ-- > 0) {
             newHandMap[card]++
             newHandMap.J--
-            console.log('newHandMap', newHandMap)
-
             handMaps.push(newHandMap)
           }
         }
