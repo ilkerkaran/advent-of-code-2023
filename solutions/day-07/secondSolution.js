@@ -13,42 +13,64 @@ export default (arr) => {
 
   const identifyHand = (hand) => {
     const handMap = {}
-    let maxKind = 0
-    let maxCard = []
+
     for (let i = 0; i < hand.length; i++) {
       const card = hand[i]
       handMap[card] = (handMap[card] ?? 0) + 1
-      if (maxKind < handMap[card]) {
-        maxCard = [card]
-        maxKind = handMap[card]
-      } else if (maxKind === handMap[card]) {
-        maxCard.push(card)
-      }
     }
 
+    const handMaps = [handMap]
     if (handMap.J) {
-      if (!maxCard.includes('J') || maxCard.length === 2) { maxKind += handMap.J }
-      if (maxCard.length === 2) {
-        maxCard.pop()
-      }
-      console.log('do elevation', maxKind)
+      Object.entries(handMap).forEach(([card, count]) => {
+        if (card !== 'J') {
+          let curJ = handMap.J
+          const newHandMap = { ...handMap }
+          while (curJ-- > 0) {
+            newHandMap[card]++
+            newHandMap.J--
+            console.log('newHandMap', newHandMap)
+
+            handMaps.push(newHandMap)
+          }
+        }
+      })
     }
 
-    if (maxKind === 5) {
-      return cardTypes.fiveOfaKind
-    } else if (maxKind === 4) {
-      return cardTypes.fourOfaKind
-    } else if (maxKind === 3) {
-      if (Object.values(handMap).includes(2)) {
-        return cardTypes.fullHouse
-      } else {
-        return cardTypes.threeOfaKind
-      }
-    } else if (
-      maxKind === 2
-    ) {
-      if (maxCard.length === 2) { return cardTypes.twoPair } else { return cardTypes.onePair }
-    } else { return cardTypes.highCard }
+    let possibleBest = 0
+    for (let i = 0; i < handMaps.length; i++) {
+      const handMap = handMaps[i]
+      let maxKind = 0
+      let maxCard = []
+
+      Object.entries(handMap).forEach(([card, count]) => {
+        if (maxKind < count) {
+          maxCard = [card]
+          maxKind = count
+        } else if (maxKind === count) {
+          maxCard.push(card)
+        }
+      })
+
+      if (maxKind === 5) {
+        possibleBest = Math.max(possibleBest, cardTypes.fiveOfaKind)
+      } else if (maxKind === 4) {
+        possibleBest = Math.max(possibleBest, cardTypes.fourOfaKind)
+      } else if (maxKind === 3) {
+        if (Object.values(handMap).includes(2)) {
+          possibleBest = Math.max(possibleBest, cardTypes.fullHouse)
+        } else {
+          possibleBest = Math.max(possibleBest, cardTypes.threeOfaKind)
+        }
+      } else if (
+        maxKind === 2
+      ) {
+        if (maxCard.length === 2) {
+          possibleBest = Math.max(possibleBest, cardTypes.twoPair)
+        } else { possibleBest = Math.max(possibleBest, cardTypes.onePair) }
+      } else { possibleBest = Math.max(possibleBest, cardTypes.highCard) }
+    }
+
+    return possibleBest
   }
 
   const hands = []
@@ -68,7 +90,6 @@ export default (arr) => {
     const [hand, bid] = arr[i].split(' ')
     const handStrength = identifyHand(hand)
     hands.push({ hand, handStrength, bid })
-    console.log('hand', hand, handStrength, bid)
   }
 
   // sort

@@ -58,7 +58,6 @@ export default (arr) => {
     const [hand, bid] = arr[i].split(' ')
     const handStrength = identifyHand(hand)
     hands.push({ hand, handStrength, bid })
-    console.log('hand', hand, handStrength, bid)
   }
 
   // sort
