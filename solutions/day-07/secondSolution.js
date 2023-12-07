@@ -23,13 +23,10 @@ export default (arr) => {
     if (handMap.J) {
       Object.entries(handMap).forEach(([card, count]) => {
         if (card !== 'J') {
-          let curJ = handMap.J
           const newHandMap = { ...handMap }
-          while (curJ-- > 0) {
-            newHandMap[card]++
-            newHandMap.J--
-            handMaps.push(newHandMap)
-          }
+          newHandMap[card] += handMap.J
+          newHandMap.J = 0
+          handMaps.push(newHandMap)
         }
       })
     }
