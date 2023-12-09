@@ -10,12 +10,10 @@ describe(`${dayName}-first`, function () {
   const func = first
   assertTest(getFileP('testinput'), func, 114)
   assertSolution(getFileP('input'), func)
-
-  // 1944159732 too high
 })
 
 describe(`${dayName}-second`, function () {
   const func = second
-  assertTest(getFileP('testinput'), func, 5905)
+  assertTest(getFileP('testinput'), func, 2)
   assertSolution(getFileP('input'), func)
 })
