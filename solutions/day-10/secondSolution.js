@@ -175,18 +175,39 @@ export default (arr) => {
 
   for (let i = 0; i < coords.length; i++) {
     const [coor, pipe, dir] = coords[i]
+
     if (pipe === '-') {
       if (dir === 'left') {
-        draw[coor[0]][coor[1] + 1] = '-'
+        if (isClockwise) {
+          if (!!draw[coor[0] + 1]?.[coor[1]] && draw[coor[0] + 1][coor[1]] !== '#') { draw[coor[0] + 1][coor[1]] = '-' }
+        } else {
+          if (!!draw[coor[0] - 1]?.[coor[1]] && draw[coor[0] - 1][coor[1]] !== '#') { draw[coor[0] - 1][coor[1]] = '-' }
+        }
       } else if (dir === 'right') {
-        draw[coor[0]][coor[1] - 1] = '-'
+        if (isClockwise) {
+          if (!!draw[coor[0] - 1]?.[coor[1]] && draw[coor[0] - 1][coor[1]] !== '#') { draw[coor[0] - 1][coor[1]] = '-' }
+        } else {
+          if (!!draw[coor[0] + 1] && draw[coor[0] + 1]?.[coor[1]] !== '#') { draw[coor[0] + 1][coor[1]] = '-' }
+        }
       }
     }
     if (pipe === '|') {
       if (dir === 'up') {
-        draw[coor[0] + 1][coor[1]] = '|'
+        if (isClockwise) {
+          if (draw[coor[0]][coor[1] - 1] && draw[coor[0]][coor[1] - 1] !== '#') {
+            console.log('eee1')
+            draw[coor[0]][coor[1] - 1] = '-'
+          }
+          console.log('eee')
+        } else {
+          if (draw[coor[0]][coor[1] + 1] && draw[coor[0]][coor[1] + 1] !== '#') { draw[coor[0]][coor[1] + 1] = '-' }
+        }
       } else if (dir === 'down') {
-        draw[coor[0] - 1][coor[1]] = '|'
+        if (isClockwise) {
+          if (draw[coor[0]][coor[1] + 1] && draw[coor[0]][coor[1] + 1] !== '#') { draw[coor[0]][coor[1] + 1] = '-' }
+        } else {
+          if (draw[coor[0]][coor[1] - 1] && draw[coor[0]][coor[1] - 1] !== '#') { draw[coor[0]][coor[1] - 1] = '-' }
+        }
       }
     }
   }

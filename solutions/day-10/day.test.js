@@ -18,9 +18,10 @@ describe(`${dayName}-second`, function () {
   const func = second
   // assertTest(getFileP('testinput'), func, 1)
   // assertTest(getFileP('testInput1'), func, 1)
-  assertTest(getFileP('testinput2'), func, 4)
+  // assertTest(getFileP('testinput2'), func, 4)
   // assertTest(getFileP('testinput5'), func, 4)
-  // assertTest(getFileP('testinput3'), func, 8)
+  assertTest(getFileP('testinput3'), func, 8)
   // assertTest(getFileP('testinput4'), func, 10)
+  // assertTest(getFileP('testinput6'), func, 2)
   // assertSolution(getFileP('input'), func)
 })
