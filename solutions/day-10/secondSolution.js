@@ -210,6 +210,58 @@ export default (arr) => {
         }
       }
     }
+    if (pipe === 'F') {
+      if (dir === 'right') {
+        if (isClockwise) {
+          if (draw[coor[0] - 1]?.[coor[1]] && draw[coor[0] - 1][coor[1]] !== '#') { draw[coor[0] - 1][coor[1]] = '-' }
+          if (draw[coor[0]]?.[coor[1] - 1] && draw[coor[0]][coor[1] - 1] !== '#') { draw[coor[0]][coor[1] - 1] = '-' }
+        }
+      } else if (dir === 'down') {
+        if (!isClockwise) {
+          if (draw[coor[0] - 1]?.[coor[1]] && draw[coor[0] - 1][coor[1]] !== '#') { draw[coor[0] - 1][coor[1]] = '-' }
+          if (draw[coor[0]]?.[coor[1] - 1] && draw[coor[0]][coor[1] - 1] !== '#') { draw[coor[0]][coor[1] - 1] = '-' }
+        }
+      }
+    }
+    if (pipe === 'L') {
+      if (dir === 'right') {
+        if (!isClockwise) {
+          if (draw[coor[0] + 1]?.[coor[1]] && draw[coor[0] + 1][coor[1]] !== '#') { draw[coor[0] + 1][coor[1]] = '-' }
+          if (draw[coor[0]]?.[coor[1] - 1] && draw[coor[0]][coor[1] - 1] !== '#') { draw[coor[0]][coor[1] - 1] = '-' }
+        }
+      } else if (dir === 'up') {
+        if (isClockwise) {
+          if (draw[coor[0] + 1]?.[coor[1]] && draw[coor[0] + 1][coor[1]] !== '#') { draw[coor[0] + 1][coor[1]] = '-' }
+          if (draw[coor[0]]?.[coor[1] - 1] && draw[coor[0]][coor[1] - 1] !== '#') { draw[coor[0]][coor[1] - 1] = '-' }
+        }
+      }
+    }
+    if (pipe === 'J') {
+      if (dir === 'left') {
+        if (isClockwise) {
+          if (draw[coor[0] + 1]?.[coor[1]] && draw[coor[0] + 1][coor[1]] !== '#') { draw[coor[0] + 1][coor[1]] = '-' }
+          if (draw[coor[0]]?.[coor[1] + 1] && draw[coor[0]][coor[1] + 1] !== '#') { draw[coor[0]][coor[1] + 1] = '-' }
+        }
+      } else if (dir === 'up') {
+        if (!isClockwise) {
+          if (draw[coor[0] + 1]?.[coor[1]] && draw[coor[0] + 1][coor[1]] !== '#') { draw[coor[0] + 1][coor[1]] = '-' }
+          if (draw[coor[0]]?.[coor[1] + 1] && draw[coor[0]][coor[1] + 1] !== '#') { draw[coor[0]][coor[1] + 1] = '-' }
+        }
+      }
+    }
+    if (pipe === '7') {
+      if (dir === 'left') {
+        if (!isClockwise) {
+          if (draw[coor[0] - 1]?.[coor[1]] && draw[coor[0] - 1][coor[1]] !== '#') { draw[coor[0] - 1][coor[1]] = '-' }
+          if (draw[coor[0]]?.[coor[1] + 1] && draw[coor[0]][coor[1] + 1] !== '#') { draw[coor[0]][coor[1] + 1] = '-' }
+        }
+      } else if (dir === 'down') {
+        if (isClockwise) {
+          if (draw[coor[0] - 1]?.[coor[1]] && draw[coor[0] - 1][coor[1]] !== '#') { draw[coor[0] - 1][coor[1]] = '-' }
+          if (draw[coor[0]]?.[coor[1] + 1] && draw[coor[0]][coor[1] + 1] !== '#') { draw[coor[0]][coor[1] + 1] = '-' }
+        }
+      }
+    }
   }
   console.log('after clockwise', draw)
 
