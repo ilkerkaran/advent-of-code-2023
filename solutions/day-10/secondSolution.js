@@ -5,18 +5,6 @@ const isLocationValid = (cur, nextPipe, curDir) => {
   if (curDir === 'right' && (nextPipe === '-' || nextPipe === 'J' || nextPipe === '7')) return nextPipe
   return false
 }
-const print2DArray = (txt, arr) => {
-  console.log(txt)
-  for (let i = 0; i < arr.length; i++) {
-    const row = arr[i]
-    let rowStr = ''
-    for (let j = 0; j < row.length; j++) {
-      const element = row[j]
-      rowStr += element
-    }
-    console.log(rowStr)
-  }
-}
 
 const getDir = (curDir, pipe) => {
   if (curDir === 'right' && (pipe === '-')) return 'right'
