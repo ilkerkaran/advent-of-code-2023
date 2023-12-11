@@ -44,3 +44,6 @@ export const print2DArray = (txt, arr) => {
     console.log(rowStr)
   }
 }
+
+export const getKeyOfMatrix = (i, j) => `${i},${j}`
+export const getCoordOfMatrixKey = (key) => key.split(',').map((str) => parseInt(str))
