@@ -7,7 +7,6 @@ const isLocationValid = (cur, nextPipe, curDir) => {
 }
 
 const getDir = (curDir, pipe) => {
-  console.log('getDir', curDir, pipe)
   if (curDir === 'right' && (pipe === '-')) return 'right'
   if (curDir === 'right' && (pipe === 'J')) return 'up'
   if (curDir === 'right' && (pipe === '7')) return 'down'
@@ -45,16 +44,10 @@ export default (arr) => {
   let paths = [firstLeft && [firstLeft, 'left'], firstRight && [firstRight, 'right'], firstUp && [firstUp, 'up'], firstDown && [firstDown, 'down']].filter((item) => item).map((item) => [startPoint, ...item])
 
   const proceed = (cur, curDir, pipe) => {
-    console.log('proceed', cur, curDir, pipe)
-    console.log('new', cur, curDir, pipe, getCoordsByDir(cur, curDir), getDir(curDir, pipe))
-
     const [nextI, nextJ] = getCoordsByDir(cur, curDir)
     const nextPipe = nextI >= 0 && nextJ >= 0 ? matrix[nextI][nextJ] : null
     return [[nextI, nextJ], nextPipe, getDir(curDir, nextPipe)]
   }
-
-  console.log('firstLeft', firstLeft, 'firstRight', firstRight, 'firstUp', firstUp, 'firstDown', firstDown)
-  console.log('matrix', startPoint, matrix)
 
   let iteration = 0
   let stop = false
