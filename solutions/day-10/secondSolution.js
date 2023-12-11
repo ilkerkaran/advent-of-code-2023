@@ -5,6 +5,18 @@ const isLocationValid = (cur, nextPipe, curDir) => {
   if (curDir === 'right' && (nextPipe === '-' || nextPipe === 'J' || nextPipe === '7')) return nextPipe
   return false
 }
+const print2DArray = (txt, arr) => {
+  console.log(txt)
+  for (let i = 0; i < arr.length; i++) {
+    const row = arr[i]
+    let rowStr = ''
+    for (let j = 0; j < row.length; j++) {
+      const element = row[j]
+      rowStr += element
+    }
+    console.log(rowStr)
+  }
+}
 
 const getDir = (curDir, pipe) => {
   if (curDir === 'right' && (pipe === '-')) return 'right'
@@ -56,7 +68,6 @@ export default (arr) => {
     return [[nextI, nextJ], nextPipe, getDir(curDir, nextPipe)]
   }
 
-  let iteration = 0
   let stop = false
   const countTurn = (curPipe, curDir) => {
     switch (curPipe) {
@@ -86,96 +97,7 @@ export default (arr) => {
     }
   }
 
-  while (!stop) {
-    iteration += 1
-    path = proceed(path[0], path[2], path[1])
-    const [, curPipe, curDir] = path
-    countTurn(curPipe, curDir)
-    coords.push(path)
-    if (path[1] === 'S') {
-      stop = true
-    }
-  }
-  console.log('turns', rightCount, leftCount)
-  const isClockwise = rightCount > leftCount
-  for (let i = 0; i < matrix.length; i++) {
-    const row = matrix[i]
-    const drawRow = []
-    for (let j = 0; j < row.length; j++) {
-      if (matrix[i][j] === '.') {
-        drawRow.push(' ')
-      } else {
-        drawRow.push('#')
-      }
-    }
-    draw.push(drawRow)
-  }
-
-  const checkElement = (i, j, dir) => {
-    if (!draw?.[i]?.[j]) {
-      return '-'
-    }
-    const [x, y] = getCoordsByDir([i, j], dir)
-    if (!isChecked(x, y)) {
-      return checkElement(x, y, dir)
-    }
-    return draw?.[x]?.[y] ?? '-'
-  }
-
-  const isDone = () => draw.every((row, i) => row.every((item, j) => item === '+' &&
-  ['+', '#'].includes(draw[getCoordsByDir([i, j], 'up')[0]]?.[getCoordsByDir([i, j], 'up')[1]]) &&
-  ['+', '#'].includes(draw[getCoordsByDir([i, j], 'down')[0]]?.[getCoordsByDir([i, j], 'down')[1]]) &&
-  ['+', '#'].includes(draw[getCoordsByDir([i, j], 'left')[0]]?.[getCoordsByDir([i, j], 'left')[1]]) &&
-  ['+', '#'].includes(draw[getCoordsByDir([i, j], 'right')[0]]?.[getCoordsByDir([i, j], 'right')[1]])))
-  console.log('draw', draw)
-  const inConditions = ['#', '+']
-  let sum = 0
-  for (let i = 0; i < draw.length; i++) {
-    const r = draw[i]
-    for (let j = 0; j < r.length; j++) {
-      const element = r[j]
-      if (element === ' ') {
-        const up = checkElement(i, j, 'up')
-        const left = checkElement(i, j, 'left')
-        const right = checkElement(i, j, 'right')
-        const down = checkElement(i, j, 'down')
-
-        if (inConditions.includes(up) &&
-        inConditions.includes(left) &&
-        inConditions.includes(right) &&
-        inConditions.includes(down)) {
-          draw[i][j] = '+'
-          sum++
-        } else { draw[i][j] = '-' }
-      }
-    }
-  }
-
-  // tarali alan icerde mi disarda mi
-  for (let i = 0; i < draw.length; i++) {
-    const r = draw[i]
-    for (let j = 0; j < r.length; j++) {
-      const element = r[j]
-      if (element === ' ') {
-        const up = checkElement(i, j, 'up')
-        const left = checkElement(i, j, 'left')
-        const right = checkElement(i, j, 'right')
-        const down = checkElement(i, j, 'down')
-
-        if (inConditions.includes(up) &&
-        inConditions.includes(left) &&
-        inConditions.includes(right) &&
-        inConditions.includes(down)) {
-          draw[i][j] = '+'
-          sum++
-        } else { draw[i][j] = '-' }
-      }
-    }
-  }
-
-  for (let i = 0; i < coords.length; i++) {
-    const [coor, pipe, dir] = coords[i]
-
+  const setPipeAdjOut = (coor, pipe, dir) => {
     if (pipe === '-') {
       if (dir === 'left') {
         if (isClockwise) {
@@ -194,19 +116,17 @@ export default (arr) => {
     if (pipe === '|') {
       if (dir === 'up') {
         if (isClockwise) {
-          if (draw[coor[0]][coor[1] - 1] && draw[coor[0]][coor[1] - 1] !== '#') {
-            console.log('eee1')
+          if (draw[coor[0]]?.[coor[1] - 1] && draw[coor[0]][coor[1] - 1] !== '#') {
             draw[coor[0]][coor[1] - 1] = '-'
           }
-          console.log('eee')
         } else {
-          if (draw[coor[0]][coor[1] + 1] && draw[coor[0]][coor[1] + 1] !== '#') { draw[coor[0]][coor[1] + 1] = '-' }
+          if (draw[coor[0]]?.[coor[1] + 1] && draw[coor[0]][coor[1] + 1] !== '#') { draw[coor[0]][coor[1] + 1] = '-' }
         }
       } else if (dir === 'down') {
         if (isClockwise) {
-          if (draw[coor[0]][coor[1] + 1] && draw[coor[0]][coor[1] + 1] !== '#') { draw[coor[0]][coor[1] + 1] = '-' }
+          if (draw[coor[0]]?.[coor[1] + 1] && draw[coor[0]][coor[1] + 1] !== '#') { draw[coor[0]][coor[1] + 1] = '-' }
         } else {
-          if (draw[coor[0]][coor[1] - 1] && draw[coor[0]][coor[1] - 1] !== '#') { draw[coor[0]][coor[1] - 1] = '-' }
+          if (draw[coor[0]]?.[coor[1] - 1] && draw[coor[0]][coor[1] - 1] !== '#') { draw[coor[0]][coor[1] - 1] = '-' }
         }
       }
     }
@@ -263,13 +183,75 @@ export default (arr) => {
       }
     }
   }
-  console.log('after clockwise', draw)
 
-  let myIteration = 0
+  while (!stop) {
+    path = proceed(path[0], path[2], path[1])
+    const [, curPipe, curDir] = path
+    countTurn(curPipe, curDir)
+    coords.push(path)
+    if (path[1] === 'S') {
+      stop = true
+    }
+  }
+  const isClockwise = rightCount > leftCount
+  for (let i = 0; i < matrix.length; i++) {
+    const row = matrix[i]
+    const drawRow = []
+    for (let j = 0; j < row.length; j++) {
+      if (coords.find(coor => coor[0][0] === i && coor[0][1] === j)) {
+        drawRow.push('#')
+      } else {
+        drawRow.push(' ')
+      }
+    }
+    draw.push(drawRow)
+  }
 
-  console.log('iDone', isDone())
-  while (!isDone() && myIteration <= 10) {
-    myIteration++
+  // set pipe adjacents whic are not inside
+  for (let i = 0; i < coords.length; i++) {
+    const [coor, pipe, dir] = coords[i]
+    setPipeAdjOut(coor, pipe, dir)
+  }
+  const checkElement = (i, j, dir) => {
+    if (!draw?.[i]?.[j]) {
+      return '-'
+    }
+    const [x, y] = getCoordsByDir([i, j], dir)
+    if (!isChecked(x, y)) {
+      return checkElement(x, y, dir)
+    }
+    return draw?.[x]?.[y] ?? '-'
+  }
+
+  const isDone = () => draw.every((row, i) => row.every((item, j) => (item === '+' &&
+  ['+', '#'].includes(draw[getCoordsByDir([i, j], 'up')[0]]?.[getCoordsByDir([i, j], 'up')[1]]) &&
+  ['+', '#'].includes(draw[getCoordsByDir([i, j], 'down')[0]]?.[getCoordsByDir([i, j], 'down')[1]]) &&
+  ['+', '#'].includes(draw[getCoordsByDir([i, j], 'left')[0]]?.[getCoordsByDir([i, j], 'left')[1]]) &&
+  ['+', '#'].includes(draw[getCoordsByDir([i, j], 'right')[0]]?.[getCoordsByDir([i, j], 'right')[1]])) || (item !== ' ')))
+
+  const inConditions = ['#', '+']
+  let sum = 0
+  for (let i = 0; i < draw.length; i++) {
+    const r = draw[i]
+    for (let j = 0; j < r.length; j++) {
+      const element = r[j]
+      if (element === ' ') {
+        const up = checkElement(i, j, 'up')
+        const left = checkElement(i, j, 'left')
+        const right = checkElement(i, j, 'right')
+        const down = checkElement(i, j, 'down')
+
+        if (inConditions.includes(up) &&
+        inConditions.includes(left) &&
+        inConditions.includes(right) &&
+        inConditions.includes(down)) {
+          draw[i][j] = '+'
+          sum++
+        } else { draw[i][j] = '-' }
+      }
+    }
+  }
+  while (!isDone()) {
     for (let i = 0; i < draw.length; i++) {
       const r = draw[i]
       for (let j = 0; j < r.length; j++) {
@@ -290,7 +272,6 @@ export default (arr) => {
       }
     }
   }
-
   sum = draw.reduce((acc, row) => acc + row.filter((item) => item === '+').length, 0)
 
   return sum

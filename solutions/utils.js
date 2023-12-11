@@ -31,3 +31,16 @@ export const assertSolution = (fullPath, targetFunc, additionalArgs = []) => {
     assert.ok(actualAns)
   })
 }
+
+export const print2DArray = (txt, arr) => {
+  console.log(txt)
+  for (let i = 0; i < arr.length; i++) {
+    const row = arr[i]
+    let rowStr = ''
+    for (let j = 0; j < row.length; j++) {
+      const element = row[j]
+      rowStr += element
+    }
+    console.log(rowStr)
+  }
+}
