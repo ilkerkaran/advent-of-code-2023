@@ -23,10 +23,27 @@ export const assertTest = (fullPath, targetFunc, expectedVal, additionalArgs = [
   })
 }
 
+export const assertTestAsync = async (fullPath, targetFunc, expectedVal, additionalArgs = []) => {
+  it(`${targetFunc.name} should return ${expectedVal}`, async function () {
+    const inputArr = readFileFromFullPath(fullPath)
+    const actualRes = await targetFunc(inputArr, ...additionalArgs)
+    assert.equal(actualRes, expectedVal)
+  })
+}
+
 export const assertSolution = (fullPath, targetFunc, additionalArgs = []) => {
   it('input should return', function () {
     const inputArr = readFileFromFullPath(fullPath)
     const actualAns = targetFunc(inputArr, ...additionalArgs)
+    console.log('predictedAnswer:', actualAns)
+    assert.ok(actualAns)
+  })
+}
+
+export const assertSolutionAsync = async (fullPath, targetFunc, additionalArgs = []) => {
+  it('input should return', async function () {
+    const inputArr = readFileFromFullPath(fullPath)
+    const actualAns = await targetFunc(inputArr, ...additionalArgs)
     console.log('predictedAnswer:', actualAns)
     assert.ok(actualAns)
   })

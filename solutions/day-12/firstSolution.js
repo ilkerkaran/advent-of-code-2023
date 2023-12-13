@@ -7,6 +7,7 @@ export default (arr) => {
     const [condition, groupStr] = r.split(' ')
     const group = groupStr.split(',').map((item) => +item)
     const arrSum = fillArrengments(condition, group)
+    console.log('condition', condition, group, arrSum)
     sum += arrSum
   }
   return sum

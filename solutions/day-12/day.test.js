@@ -6,9 +6,9 @@ import second from './secondSolution.js'
 // eg `mocha test -- -f day12-first`
 const dayName = 'day12'
 
-describe(`${dayName}-first: ${new Date().toISOString().match(/(\d{2}:){2}\d{2}/)[0]}`, async function () {
+describe(`${dayName}-first: ${new Date().toISOString().match(/(\d{2}:){2}\d{2}/)[0]}`, function () {
   const func = first
-  await Promise.all([assertTestAsync(getFileP('testinput'), func, 21), assertSolution(getFileP('input'), func)])
+  assertTest(getFileP('testinput'), func, 21)
 })
 
 describe(`${dayName}-second: ${new Date().toISOString().match(/(\d{2}:){2}\d{2}/)[0]}`, function () {
