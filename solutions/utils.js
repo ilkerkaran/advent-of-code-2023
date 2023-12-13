@@ -64,3 +64,12 @@ export const print2DArray = (txt, arr) => {
 
 export const getKeyOfMatrix = (i, j) => `${i},${j}`
 export const getCoordOfMatrixKey = (key) => key.split(',').map((str) => parseInt(str))
+
+export const areColumnsEqual = (arr, col1, col2) => {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i][col1] !== arr[i][col2]) {
+      return false
+    }
+  }
+  return true
+}
