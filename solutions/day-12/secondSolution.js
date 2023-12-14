@@ -116,11 +116,11 @@ export default (arr, isP2 = true) => {
     const r = arr[i]
     const [conditionStr, groupStr] = r.split(' ')
     const group = groupStr.split(',').map((item) => +item)
-    const [unfoldedCondition, unfoldedGroup] = getUnfolded(conditionStr, group)
-    const conditionPieces = (isP2 ? conditionStr : unfoldedCondition).replaceAll(/(\.)\1+/g, '.').split('.').filter((item) => item !== '')
-    const g = isP2 ? unfoldedGroup : group
-    const arrSum = resolveConditions(conditionPieces, g)
-    console.log(i + 1, arrSum)
+    const [unfoldedCondition, unfoldedGroup] = isP2 ? getUnfolded(conditionStr, group) : [conditionStr, group]
+    const conditionPieces = (unfoldedCondition).replaceAll(/(\.)\1+/g, '.').split('.').filter((item) => item !== '')
+
+    const arrSum = resolveConditions(conditionPieces, unfoldedGroup)
+    console.log(i + 1, unfoldedCondition, unfoldedGroup, arrSum)
     sum += arrSum
   }
   // console.log('cache', myCache)
