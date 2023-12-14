@@ -93,6 +93,5 @@ export const calcCombinationsFirstPart = (n, k) => {
 }
 
 export const calcCombinations = (n, k) => {
-  const power = 10
-  return Math.round(((calcCombinationsFirstPart(n, k) / calcFactorial(n - k)) * power) + (Number.EPSILON * power)) / power
+  return calcCombinationsFirstPart(n, k) / calcFactorial(n - k)
 }

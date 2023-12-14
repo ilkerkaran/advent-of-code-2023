@@ -16,29 +16,38 @@ const calcQArr = (qLen, group) => {
 
   const spaces = group.length + space
   const pieceCount = group.length
-  if (myCache[`${spaces}-${pieceCount}`]) {
-    return myCache[`${spaces}-${pieceCount}`]
+  if (myCache[`c:${spaces}-${pieceCount}`]) {
+    return myCache[`c:${spaces}-${pieceCount}`]
   }
   const ans = calcCombinations(spaces, pieceCount)
-  myCache[`${spaces}-${pieceCount}`] = ans
-  myCache[`${spaces}-${spaces - pieceCount}`] = ans
+  myCache[`c:${spaces}-${pieceCount}`] = ans
+  myCache[`c:${spaces}-${spaces - pieceCount}`] = ans
   return ans
 }
 
 const calcHashQArr = (condition, group, sum = 0) => {
+  const cacheK = `a:${condition}-${group.join(',')}`
+  if (myCache[cacheK]) {
+    return myCache[cacheK]
+  }
   if (group.length === 0) {
     if (condition && condition.split('').some((item) => item === '#')) {
+      myCache[cacheK] = 0
       return 0
     } else {
+      myCache[cacheK] = 1
       return 1
     }
   }
   if (condition.length < group.reduce((acc, item) => acc + item, 0) + group.length - 1) {
+    myCache[cacheK] = 0
     return 0
   }
 
   if (condition.split('').every((item) => item === '?')) {
-    return group.length === 0 ? 1 : calcQArr(condition.length, group)
+    const r = group.length === 0 ? 1 : calcQArr(condition.length, group)
+    myCache[cacheK] = r
+    return r
   }
   for (let i = 0; i < condition.length; i++) {
     const node = condition[i]
@@ -66,6 +75,7 @@ const calcHashQArr = (condition, group, sum = 0) => {
           }
         }
       }
+      myCache[cacheK] = sum
       return sum
     }
   }
@@ -101,17 +111,36 @@ const resolveConditions = (conditionPieces, group, sum = 0) => {
 
 export default (arr) => {
   let sum = 0
-  for (let i = 566; i < arr.length; i++) {
+
+  /// test piece
+  // .??????#????????? 3,1,2,2,1
+  // .?#?#?##??.#.???# 7,1,2,1
+  // #???#???#???.#?? 5,3,1,1,1
+
+  // const [myunfoldedCondition, myunfoldedGroup] = getUnfolded('.??????#?????????', [3, 1, 2, 2, 1])
+  // console.log('h1', myunfoldedCondition, myunfoldedGroup)
+  // console.log('hop1', resolveConditions(myunfoldedCondition.replaceAll(/(\.)\1+/g, '.').split('.').filter((item) => item !== ''), myunfoldedGroup))
+
+  // const [myunfoldedCondition1, myunfoldedGroup1] = getUnfolded('.?#?#?##??.#.???#', [7, 1, 2, 1])
+  // console.log('h2', myunfoldedCondition1, myunfoldedGroup1)
+  // console.log('hop2', resolveConditions(myunfoldedCondition1.replaceAll(/(\.)\1+/g, '.').split('.').filter((item) => item !== ''), myunfoldedGroup1))
+
+  // const [myunfoldedCondition2, myunfoldedGroup2] = getUnfolded('#???#???#???.#??', [5, 3, 1, 1, 1])
+  // console.log('h3', myunfoldedCondition2, myunfoldedGroup2)
+  // console.log('hop3', resolveConditions(myunfoldedCondition2.replaceAll(/(\.)\1+/g, '.').split('.').filter((item) => item !== ''), myunfoldedGroup2))
+  // return 1
+  /// test piece end
+
+  for (let i = 0; i < arr.length; i++) {
     const r = arr[i]
     const [conditionStr, groupStr] = r.split(' ')
     const group = groupStr.split(',').map((item) => +item)
     const [unfoldedCondition, unfoldedGroup] = getUnfolded(conditionStr, group)
     const conditionPieces = unfoldedCondition.replaceAll(/(\.)\1+/g, '.').split('.').filter((item) => item !== '')
-
     const arrSum = resolveConditions(conditionPieces, unfoldedGroup)
     console.log(i + 1, arrSum)
     sum += arrSum
   }
-  console.log('cache', myCache)
+  // console.log('cache', myCache)
   return sum
 }
