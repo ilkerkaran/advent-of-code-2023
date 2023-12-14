@@ -1,3 +1,7 @@
+import { calcCombinations } from '../utils.js'
+
+const myCache = {}
+
 const getUnfolded = (condition, group) => {
   let unfoldedCondition = ''
   const unfoldedGroup = []
@@ -7,72 +11,107 @@ const getUnfolded = (condition, group) => {
   }
   return [unfoldedCondition, unfoldedGroup]
 }
+const calcQArr = (qLen, group) => {
+  const space = qLen - group.reduce((acc, item) => acc + item, 0) - group.length + 1
 
-const calcQArr = (qLen, group, s = 0) => {
-  if (group.length === 0) {
-    return 0
+  const spaces = group.length + space
+  const pieceCount = group.length
+  if (myCache[`${spaces}-${pieceCount}`]) {
+    return myCache[`${spaces}-${pieceCount}`]
   }
-  let g = group.shift()
-
-  const remGroupLength = group.reduce((acc, item) => acc + item, 0) + group.length - 1
-  console.log('qLen, group, s', qLen, group, s, remGroupLength)
-  if (!group.length) {
-    if (qLen >= g) {
-      return (qLen - g + 1)
-    } else return 0
-  } else {
-    g++
-    for (let i = 0; i < qLen - remGroupLength; i++) {
-      s += calcQArr(qLen - g - i, [...group], s)
-    }
-    return s
-  }
+  const ans = calcCombinations(spaces, pieceCount)
+  myCache[`${spaces}-${pieceCount}`] = ans
+  myCache[`${spaces}-${spaces - pieceCount}`] = ans
+  return ans
 }
 
 const calcHashQArr = (condition, group, sum = 0) => {
-  if (group.length === 0) return 1
+  if (group.length === 0) {
+    if (condition && condition.split('').some((item) => item === '#')) {
+      return 0
+    } else {
+      return 1
+    }
+  }
+  if (condition.length < group.reduce((acc, item) => acc + item, 0) + group.length - 1) {
+    return 0
+  }
+
   if (condition.split('').every((item) => item === '?')) {
     return group.length === 0 ? 1 : calcQArr(condition.length, group)
   }
   for (let i = 0; i < condition.length; i++) {
     const node = condition[i]
+    let sum = 0
     if (node === '#') {
       for (let j = 0; j < group.length; j++) {
         const g = group[j]
         for (let k = i - g + 1; k <= i; k++) {
-          if (condition[k]) {
-            const prior = calcHashQArr(condition.slice(0, k), group.slice(0, j))
-            const after = calcHashQArr(condition.slice(k + 1), group.slice(j + 1))
-            console.log('prior, after', prior, after)
-            return sum + (prior * after)
+          // is suitable
+          let isSuitable = true
+          for (let m = 0; m < g; m++) {
+            if (!condition[k + m] || condition[k + m] === '.') {
+              isSuitable = false
+              break
+            }
+          }
+          if (condition[k + g] === '#' || condition[k - 1] === '#') {
+            isSuitable = false
+          }
+
+          if (isSuitable) {
+            const prior = calcHashQArr(condition.slice(0, Math.max(k - 1, 0)), group.slice(0, j))
+            const after = calcHashQArr(condition.slice(k + g + 1), group.slice(j + 1))
+            sum += (prior * after)
           }
         }
       }
+      return sum
     }
   }
 }
 
+const resolveConditions = (conditionPieces, group, sum = 0) => {
+  // console.log('!!!here', conditionPieces, group, sum)
+  if (conditionPieces.length === 1) {
+    return calcHashQArr(conditionPieces[0], group)
+  }
+  if (conditionPieces.length === 0) {
+    return group.length === 0 ? 1 : 0
+  }
+  for (let i = 0; i < conditionPieces.length; i++) {
+    const conditionPiece = conditionPieces[i]
+    const nextPieces = conditionPieces.slice(i + 1)
+    const localPossibilityPieces = []
+    for (let j = 0; j < group.length; j++) {
+      const localGroup = group.slice(0, j + 1)
+
+      // group does not fit the condition
+      if (conditionPiece.length < localGroup.reduce((acc, item) => acc + item, 0) + localGroup.length - 1) {
+        continue
+      }
+      const pieceVal = calcHashQArr(conditionPiece, localGroup)
+      const nextPiecesVal = resolveConditions(nextPieces, group.slice(j + 1))
+      localPossibilityPieces.push(pieceVal * nextPiecesVal)
+      sum += pieceVal * nextPiecesVal
+    }
+  }
+  return sum
+}
+
 export default (arr) => {
   let sum = 0
-  for (let i = 0; i < arr.length; i++) {
+  for (let i = 566; i < arr.length; i++) {
     const r = arr[i]
     const [conditionStr, groupStr] = r.split(' ')
     const group = groupStr.split(',').map((item) => +item)
     const [unfoldedCondition, unfoldedGroup] = getUnfolded(conditionStr, group)
-    const condition = conditionStr.replaceAll(/(\.)\1+/g, '.').split('.')
+    const conditionPieces = unfoldedCondition.replaceAll(/(\.)\1+/g, '.').split('.').filter((item) => item !== '')
 
-    console.log('unfoldedCondition, unfoldedGroup', unfoldedCondition, unfoldedGroup)
-    const arrSum = 1// fillArrengments(unfoldedCondition, unfoldedGroup)
-
-    console.log('QArr', calcQArr(6, [1, 1, 1]))
-    console.log('??#?#', calcHashQArr('?#', [1]), '1')
-    console.log('??#?#', calcHashQArr('??#?#', [1, 1]), '1')
-    console.log('??#?#', calcHashQArr('??#?#', [1, 1, 1]), '1')
-    // console.log('???#?#', calcHashQArr('???#?#', [1, 1, 1]), '2')
-    // console.log('????#??#??', calcHashQArr('????#??#??', [2, 2, 2]), '4')
-    // console.log('????#??#??', calcHashQArr('????#??#??', [2, 4]), '3')
+    const arrSum = resolveConditions(conditionPieces, unfoldedGroup)
+    console.log(i + 1, arrSum)
     sum += arrSum
-    console.log('iterasyon', i + 1, arrSum)
   }
+  console.log('cache', myCache)
   return sum
 }

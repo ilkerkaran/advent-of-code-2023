@@ -73,3 +73,26 @@ export const areColumnsEqual = (arr, col1, col2) => {
   }
   return true
 }
+
+export const calcFactorial = (n) => {
+  if (n === 0) {
+    return 1
+  }
+  return n * calcFactorial(n - 1)
+}
+
+export const calcCombinationsFirstPart = (n, k) => {
+  let res = 1
+  let counter = n - k
+  while (counter > 0) {
+    res *= n
+    n--
+    counter--
+  }
+  return res
+}
+
+export const calcCombinations = (n, k) => {
+  const power = 10
+  return Math.round(((calcCombinationsFirstPart(n, k) / calcFactorial(n - k)) * power) + (Number.EPSILON * power)) / power
+}
