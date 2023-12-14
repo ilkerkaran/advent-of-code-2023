@@ -109,35 +109,17 @@ const resolveConditions = (conditionPieces, group, sum = 0) => {
   return sum
 }
 
-export default (arr) => {
+export default (arr, isP2 = true) => {
   let sum = 0
-
-  /// test piece
-  // .??????#????????? 3,1,2,2,1
-  // .?#?#?##??.#.???# 7,1,2,1
-  // #???#???#???.#?? 5,3,1,1,1
-
-  // const [myunfoldedCondition, myunfoldedGroup] = getUnfolded('.??????#?????????', [3, 1, 2, 2, 1])
-  // console.log('h1', myunfoldedCondition, myunfoldedGroup)
-  // console.log('hop1', resolveConditions(myunfoldedCondition.replaceAll(/(\.)\1+/g, '.').split('.').filter((item) => item !== ''), myunfoldedGroup))
-
-  // const [myunfoldedCondition1, myunfoldedGroup1] = getUnfolded('.?#?#?##??.#.???#', [7, 1, 2, 1])
-  // console.log('h2', myunfoldedCondition1, myunfoldedGroup1)
-  // console.log('hop2', resolveConditions(myunfoldedCondition1.replaceAll(/(\.)\1+/g, '.').split('.').filter((item) => item !== ''), myunfoldedGroup1))
-
-  // const [myunfoldedCondition2, myunfoldedGroup2] = getUnfolded('#???#???#???.#??', [5, 3, 1, 1, 1])
-  // console.log('h3', myunfoldedCondition2, myunfoldedGroup2)
-  // console.log('hop3', resolveConditions(myunfoldedCondition2.replaceAll(/(\.)\1+/g, '.').split('.').filter((item) => item !== ''), myunfoldedGroup2))
-  // return 1
-  /// test piece end
 
   for (let i = 0; i < arr.length; i++) {
     const r = arr[i]
     const [conditionStr, groupStr] = r.split(' ')
     const group = groupStr.split(',').map((item) => +item)
     const [unfoldedCondition, unfoldedGroup] = getUnfolded(conditionStr, group)
-    const conditionPieces = unfoldedCondition.replaceAll(/(\.)\1+/g, '.').split('.').filter((item) => item !== '')
-    const arrSum = resolveConditions(conditionPieces, unfoldedGroup)
+    const conditionPieces = (isP2 ? conditionStr : unfoldedCondition).replaceAll(/(\.)\1+/g, '.').split('.').filter((item) => item !== '')
+    const g = isP2 ? unfoldedGroup : group
+    const arrSum = resolveConditions(conditionPieces, g)
     console.log(i + 1, arrSum)
     sum += arrSum
   }

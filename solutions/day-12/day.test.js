@@ -9,6 +9,7 @@ const dayName = 'day12'
 describe(`${dayName}-first: ${new Date().toISOString().match(/(\d{2}:){2}\d{2}/)[0]}`, function () {
   const func = first
   assertTest(getFileP('testinput'), func, 21)
+   assertSolution(getFileP('input'), func)
 })
 
 describe(`${dayName}-second: ${new Date().toISOString().match(/(\d{2}:){2}\d{2}/)[0]}`, function () {
