@@ -95,3 +95,7 @@ export const calcCombinationsFirstPart = (n, k) => {
 export const calcCombinations = (n, k) => {
   return calcCombinationsFirstPart(n, k) / calcFactorial(n - k)
 }
+
+export const getTime = () => {
+  return new Date().toISOString().match(/(\d{2}:){2}\d{2}/)[0]
+}

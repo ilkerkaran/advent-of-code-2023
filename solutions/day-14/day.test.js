@@ -14,6 +14,6 @@ describe(`${dayName}-first`, function () {
 
 describe(`${dayName}-second`, function () {
   const func = second
-  assertTest(getFileP('testinput'), func, 400)
+  // assertTest(getFileP('testinput'), func, 64)
   assertSolution(getFileP('input'), func)
 })

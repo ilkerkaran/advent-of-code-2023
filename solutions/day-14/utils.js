@@ -1,121 +1,106 @@
-import { areColumnsEqual } from '../utils.js'
-
-export const getPatternVal = (pattern) => {
-  let tempVerticalIndexes = []
-  let tempHorizontalIndexes = []
-  // check horizontal mirrors
-  for (let j = 0; j < pattern.length - 1; j++) {
-    const startIndex = j
-    const tempIndexes = []
-    let tmpCounter = 0
-    let isMirror = true
-    while (startIndex - tmpCounter >= 0) {
-      if (!pattern[startIndex - tmpCounter]) {
-        isMirror = true
-        break
-      } else if (!!pattern[startIndex + tmpCounter + 1] &&
-        (pattern[startIndex - tmpCounter] !== pattern[startIndex + tmpCounter + 1])) {
-        isMirror = false
-        break
+export const tiltNorth = (platform, dirFinder) => {
+  for (let i = 0; i < platform.length; i++) {
+    for (let j = 0; j < platform[0].length; j++) {
+      const piece = platform[i][j]
+      if (piece === 'O') {
+        let [ni, nj] = n(i, j)
+        let nextPiece = platform[ni]?.[nj]
+        let dist = 0
+        while (nextPiece === '.') {
+          [ni, nj] = n(ni, nj)
+          dist++
+          nextPiece = platform[ni]?.[nj]
+        }
+        platform[i][j] = '.'
+        const [nni, nnj] = n(i, j, dist)
+        platform[nni][nnj] = 'O'
       }
-      tempIndexes.push(startIndex - tmpCounter)
-      tmpCounter++
-    }
-
-    if (isMirror && tempIndexes.length > tempHorizontalIndexes.length) {
-      tempHorizontalIndexes = tempIndexes
-      break
     }
   }
-  if (tempHorizontalIndexes.length > 0) {
-    return 100 * tempHorizontalIndexes.length
-  }
-
-  // check vertical mirrors
-  for (let j = 0; j < pattern[0].length; j++) {
-    const startIndex = j
-    const tempIndexes = []
-    let tmpCounter = 0
-    let isMirror = true
-    while (startIndex - tmpCounter >= 0) {
-      if (!pattern[0][startIndex - tmpCounter]) {
-        isMirror = true
-        break
-      } else if (!!pattern[0][startIndex + tmpCounter + 1] && !areColumnsEqual(pattern, startIndex - tmpCounter, startIndex + tmpCounter + 1)) {
-        isMirror = false
-        break
-      }
-      tempIndexes.push(startIndex - tmpCounter)
-      tmpCounter++
-    }
-
-    if (isMirror && tempIndexes.length >= tempVerticalIndexes.length) {
-      tempVerticalIndexes = tempIndexes
-      break
-    }
-  }
-  return tempVerticalIndexes.length
 }
 
-export const getPatternMap = (pattern) => {
-  const pMap = { v: [], h: [] }
-
-  const tempVerticalIndexes = []
-  const tempHorizontalIndexes = []
-  // check horizontal mirrors
-  for (let j = 0; j < pattern.length - 1; j++) {
-    const startIndex = j
-    const tempIndexes = []
-    let tmpCounter = 0
-    let isMirror = true
-    while (startIndex - tmpCounter >= 0) {
-      if (!pattern[startIndex - tmpCounter]) {
-        isMirror = true
-        break
-      } else if (!!pattern[startIndex + tmpCounter + 1] &&
-        (pattern[startIndex - tmpCounter] !== pattern[startIndex + tmpCounter + 1])) {
-        isMirror = false
-        break
+export const tiltWest = (platform, dirFinder) => {
+  for (let i = 0; i < platform.length; i++) {
+    for (let j = 0; j < platform[0].length; j++) {
+      const piece = platform[i][j]
+      if (piece === 'O') {
+        let [ni, nj] = w(i, j)
+        let nextPiece = platform[ni]?.[nj]
+        let dist = 0
+        while (nextPiece === '.') {
+          [ni, nj] = w(ni, nj)
+          dist++
+          nextPiece = platform[ni]?.[nj]
+        }
+        platform[i][j] = '.'
+        const [nni, nnj] = w(i, j, dist)
+        platform[nni][nnj] = 'O'
       }
-      tempIndexes.push(startIndex - tmpCounter)
-      tmpCounter++
-    }
-
-    if (isMirror && tempIndexes.length) {
-      tempHorizontalIndexes.push(tempIndexes)
     }
   }
-
-  // check vertical mirrors
-  for (let j = 0; j < pattern[0].length - 1; j++) {
-    const startIndex = j
-    const tempIndexes = []
-    let tmpCounter = 0
-    let isMirror = true
-    while (startIndex - tmpCounter >= 0) {
-      if (!pattern[0][startIndex - tmpCounter]) {
-        isMirror = true
-        break
-      } else if (!!pattern[0][startIndex + tmpCounter + 1] && !areColumnsEqual(pattern, startIndex - tmpCounter, startIndex + tmpCounter + 1)) {
-        isMirror = false
-        break
-      }
-      tempIndexes.push(startIndex - tmpCounter)
-      tmpCounter++
-    }
-
-    if (isMirror && tempIndexes.length >= tempVerticalIndexes.length) {
-      tempVerticalIndexes.push(tempIndexes)
-    }
-  }
-  for (let i = 0; i < tempHorizontalIndexes.length; i++) {
-    const element = tempHorizontalIndexes[i]
-    pMap.h.push(JSON.stringify(element))
-  }
-  for (let i = 0; i < tempVerticalIndexes.length; i++) {
-    const element = tempVerticalIndexes[i]
-    pMap.v.push(JSON.stringify(element))
-  }
-
-  return pMap
 }
+
+export const tiltEast = (platform, dirFinder) => {
+  for (let i = platform.length - 1; i >= 0; i--) {
+    for (let j = platform[0].length - 1; j >= 0; j--) {
+      const piece = platform[i][j]
+      if (piece === 'O') {
+        let [ni, nj] = e(i, j)
+        let nextPiece = platform[ni]?.[nj]
+        let dist = 0
+        while (nextPiece === '.') {
+          [ni, nj] = e(ni, nj)
+          dist++
+          nextPiece = platform[ni]?.[nj]
+        }
+        platform[i][j] = '.'
+        const [nni, nnj] = e(i, j, dist)
+        platform[nni][nnj] = 'O'
+      }
+    }
+  }
+}
+
+export const tiltSouth = (platform, dirFinder) => {
+  for (let i = platform.length - 1; i >= 0; i--) {
+    for (let j = platform[0].length - 1; j >= 0; j--) {
+      const piece = platform[i][j]
+      if (piece === 'O') {
+        let [ni, nj] = s(i, j)
+        let nextPiece = platform[ni]?.[nj]
+        let dist = 0
+        while (nextPiece === '.') {
+          [ni, nj] = s(ni, nj)
+          dist++
+          nextPiece = platform[ni]?.[nj]
+        }
+        platform[i][j] = '.'
+        const [nni, nnj] = s(i, j, dist)
+        platform[nni][nnj] = 'O'
+      }
+    }
+  }
+}
+
+export const fullSpin = (platform) => {
+  tiltNorth(platform)
+  tiltWest(platform)
+  tiltSouth(platform)
+  tiltEast(platform)
+}
+
+const n = (i, j, dist = 1) => [
+  i - dist, j
+]
+
+const e = (i, j, dist = 1) => [
+  i, j + dist
+]
+
+const s = (i, j, dist = 1) => [
+  i + dist, j
+]
+
+const w = (i, j, dist = 1) => [
+  i, j - dist
+]
