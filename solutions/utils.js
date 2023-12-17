@@ -99,3 +99,19 @@ export const calcCombinations = (n, k) => {
 export const getTime = () => {
   return new Date().toISOString().match(/(\d{2}:){2}\d{2}/)[0]
 }
+
+export const n = (i, j, dist = 1) => [
+  i - dist, j
+]
+
+export const e = (i, j, dist = 1) => [
+  i, j + dist
+]
+
+export const s = (i, j, dist = 1) => [
+  i + dist, j
+]
+
+export const w = (i, j, dist = 1) => [
+  i, j - dist
+]
