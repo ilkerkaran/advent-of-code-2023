@@ -11,6 +11,7 @@ describe(`${dayName}-first`, function () {
   // assertTest(getFileP('testinput'), func, 102)
   // assertTest(getFileP('testinput1'), func, 9)
   assertTest(getFileP('testinput2'), func, 2)
+  // assertTest(getFileP('testinput3'), func, 4)
   // assertSolution(getFileP('input'), func)
 })
 
